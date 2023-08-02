@@ -46,7 +46,6 @@
             margin-top: 30px;
         }
 
-        #data,
         #result {
             width: 100%;
             height: 80px;
