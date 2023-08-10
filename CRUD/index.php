@@ -21,8 +21,8 @@
         <div class="row">
             <div class="column column-60 column-offset-20">
                 <h2>Project 2 - CRUD</h2>
-
                 <p>A sample project to perform CRUD operations using plain files and PHP</p>
+                <?php include_once 'inc/templates/nav.php' ?>
             </div>
         </div>
     </div>
