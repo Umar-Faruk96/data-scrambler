@@ -1,3 +1,13 @@
+<?php
+    declare(strict_types=1);
+    require_once "inc/functions.php";
+    $info = '';
+    $task = $_GET['task'] ?? 'report';
+    if ('seed' === $task) {
+        seed(DATABASE_FILE);
+        $info = "Seeding is completed";
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,15 +27,28 @@
 </head>
 
 <body>
-    <div class="container">
-        <div class="row">
-            <div class="column column-60 column-offset-20">
-                <h2>Project 2 - CRUD</h2>
-                <p>A sample project to perform CRUD operations using plain files and PHP</p>
-                <?php include_once 'inc/templates/nav.php' ?>
-            </div>
+<div class="container">
+    <div class="row">
+        <div class="column column-60 column-offset-20">
+            <h2>Project 2 - CRUD</h2>
+            <p>A sample project to perform CRUD operations using plain files and PHP</p>
+            <?php include_once 'inc/templates/nav.php' ?>
+            <hr>
+            <?php
+                if ($info !== '') {
+                    echo "<p>$info</p>";
+                }
+            ?>
         </div>
     </div>
+    <?php if ("report" === $task) : ?>
+        <div class="row">
+            <div class="column column-60 column-offset-20">
+                <?php generateReport(DATABASE_FILE); ?>
+            </div>
+        </div>
+    <?php endif; ?>
+</div>
 </body>
 
 </html>
