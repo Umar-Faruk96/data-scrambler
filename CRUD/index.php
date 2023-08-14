@@ -3,7 +3,7 @@
 	require_once "inc/functions.php";
 	$seedInfo = '';
 	$taskHolder = $_GET['task'] ?? 'report';
-	$taskError = $_GET['error'] ?? '0';
+	$taskError = $_GET['error'] ?? 'not found';
 	# seed mechanism
 	if ('seed' === $taskHolder) {
 		seed(DATABASE_FILE);
@@ -11,15 +11,15 @@
 	}
 	#add student logic
 	if (isset($_POST['submit'])) {
-		$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING);
-		$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
-		$roll = filter_input(INPUT_POST, 'roll', FILTER_SANITIZE_STRING);
+		$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$roll = filter_input(INPUT_POST, 'roll', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		if ($firstName !== '' && $lastName !== '' && $roll !== '') {
 			$studentAdded = addStudent(DATABASE_FILE, $firstName, $lastName, $roll);
 			if ($studentAdded) {
 				header('location:/hasin haider/projects/CRUD/index.php?task=report');
 			} else {
-				header('location:/hasin haider/projects/CRUD/index.php?task=report&error=found');
+				$taskError = 'found';
 			}
 		}
 	}
@@ -63,7 +63,8 @@
                <blockquote>Duplicate Roll Number Found</blockquote>
            </div>
        </div>
-	<?php elseif ("report" === $taskHolder) : ?>
+	<?php endif; ?>
+	<?php if ("report" === $taskHolder) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
 				  <?php generateReport(DATABASE_FILE); ?>
@@ -73,13 +74,13 @@
 	<?php if ("add" === $taskHolder) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
-               <form action="/hasin haider/projects/CRUD/index.php?task=report" method="post">
+               <form action="/hasin haider/projects/CRUD/index.php?task=add" method="post">
                    <label for="firstName">First Name</label>
-                   <input type="text" name="firstName" id="firstName" required>
+                   <input type="text" name="firstName" id="firstName" value="<?= $firstName ?? '' ?>" required>
                    <label for="lastName">Last Name</label>
-                   <input type="text" name="lastName" id="lastName" required>
+                   <input type="text" name="lastName" id="lastName" value="<?= $lastName ?? '' ?>" required>
                    <label for="roll">Roll</label>
-                   <input type="number" name="roll" id="roll">
+                   <input type="number" name="roll" id="roll" value="<?= $roll ?? '' ?>" required>
                    <button type="submit" class="button-primary" name="submit">Save</button>
                </form>
            </div>
