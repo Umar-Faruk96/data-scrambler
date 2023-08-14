@@ -1,12 +1,28 @@
 <?php
-    declare(strict_types=1);
-    require_once "inc/functions.php";
-    $info = '';
-    $task = $_GET['task'] ?? 'report';
-    if ('seed' === $task) {
-        seed(DATABASE_FILE);
-        $info = "Seeding is completed";
-    }
+	declare(strict_types=1);
+	require_once "inc/functions.php";
+	$seedInfo = '';
+	$taskHolder = $_GET['task'] ?? 'report';
+	$taskError = $_GET['error'] ?? '0';
+	# seed mechanism
+	if ('seed' === $taskHolder) {
+		seed(DATABASE_FILE);
+		$seedInfo = "Seeding is completed";
+	}
+	#add student logic
+	if (isset($_POST['submit'])) {
+		$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_STRING);
+		$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_STRING);
+		$roll = filter_input(INPUT_POST, 'roll', FILTER_SANITIZE_STRING);
+		if ($firstName !== '' && $lastName !== '' && $roll !== '') {
+			$studentAdded = addStudent(DATABASE_FILE, $firstName, $lastName, $roll);
+			if ($studentAdded) {
+				header('location:/hasin haider/projects/CRUD/index.php?task=report');
+			} else {
+				header('location:/hasin haider/projects/CRUD/index.php?task=report&error=found');
+			}
+		}
+	}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -32,22 +48,43 @@
         <div class="column column-60 column-offset-20">
             <h2>Project 2 - CRUD</h2>
             <p>A sample project to perform CRUD operations using plain files and PHP</p>
-            <?php include_once 'inc/templates/nav.php' ?>
+			  <?php include_once 'inc/templates/nav.php' ?>
             <hr>
-            <?php
-                if ($info !== '') {
-                    echo "<p>$info</p>";
-                }
-            ?>
+			  <?php
+				  if ($seedInfo !== '') {
+					  echo "<p>$seedInfo</p>";
+				  }
+			  ?>
         </div>
     </div>
-    <?php if ("report" === $task) : ?>
-        <div class="row">
-            <div class="column column-60 column-offset-20">
-                <?php generateReport(DATABASE_FILE); ?>
-            </div>
-        </div>
-    <?php endif; ?>
+	<?php if ("found" === $taskError) : ?>
+       <div class="row">
+           <div class="column column-60 column-offset-20">
+               <blockquote>Duplicate Roll Number Found</blockquote>
+           </div>
+       </div>
+	<?php elseif ("report" === $taskHolder) : ?>
+       <div class="row">
+           <div class="column column-60 column-offset-20">
+				  <?php generateReport(DATABASE_FILE); ?>
+           </div>
+       </div>
+	<?php endif; ?>
+	<?php if ("add" === $taskHolder) : ?>
+       <div class="row">
+           <div class="column column-60 column-offset-20">
+               <form action="/hasin haider/projects/CRUD/index.php?task=report" method="post">
+                   <label for="firstName">First Name</label>
+                   <input type="text" name="firstName" id="firstName" required>
+                   <label for="lastName">Last Name</label>
+                   <input type="text" name="lastName" id="lastName" required>
+                   <label for="roll">Roll</label>
+                   <input type="number" name="roll" id="roll">
+                   <button type="submit" class="button-primary" name="submit">Save</button>
+               </form>
+           </div>
+       </div>
+	<?php endif; ?>
 </div>
 </body>
 
