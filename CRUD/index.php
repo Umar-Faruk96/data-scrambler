@@ -9,17 +9,31 @@
 		seed(DATABASE_FILE);
 		$seedInfo = "Seeding is completed";
 	}
-	#add student logic
+	#add and update student logic
 	if (isset($_POST['submit'])) {
 		$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$lastName = filter_input(INPUT_POST, 'lastName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$roll = filter_input(INPUT_POST, 'roll', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
-		if ($firstName !== '' && $lastName !== '' && $roll !== '') {
-			$studentAdded = addStudent(DATABASE_FILE, $firstName, $lastName, $roll);
-			if ($studentAdded) {
-				header('location:/hasin haider/projects/CRUD/index.php?task=report');
-			} else {
-				$taskError = 'found';
+		$id = filter_input(INPUT_POST, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		if (!empty($id)) {
+			# update existing student
+			if ($firstName !== '' && $lastName !== '' && $roll !== '') {
+				$studentUpdated = updateStudent(DATABASE_FILE, $id, $firstName, $lastName, $roll);
+				if ($studentUpdated) {
+					header('location:/hasin haider/projects/CRUD/index.php?task=report');
+				} else {
+					$taskError = 'found';
+				}
+			}
+		} else {
+			# add new student
+			if ($firstName !== '' && $lastName !== '' && $roll !== '') {
+				$studentAdded = addStudent(DATABASE_FILE, $firstName, $lastName, $roll);
+				if ($studentAdded) {
+					header('location:/hasin haider/projects/CRUD/index.php?task=report');
+				} else {
+					$taskError = 'found';
+				}
 			}
 		}
 	}
@@ -57,6 +71,7 @@
 			  ?>
         </div>
     </div>
+    <!--   duplicate roll found output-->
 	<?php if ("found" === $taskError) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
@@ -64,6 +79,7 @@
            </div>
        </div>
 	<?php endif; ?>
+    <!--   generate report output-->
 	<?php if ("report" === $taskHolder) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
@@ -71,6 +87,7 @@
            </div>
        </div>
 	<?php endif; ?>
+    <!--   add student form output-->
 	<?php if ("add" === $taskHolder) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
@@ -86,6 +103,42 @@
            </div>
        </div>
 	<?php endif; ?>
+    <!--	edit student form output-->
+	<?php if ("edit" === $taskHolder) :
+		$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$studentEditable = getStudent(DATABASE_FILE, $id);
+		if ($studentEditable):?>
+          <div class="row">
+              <div class="column column-60 column-offset-20">
+                  <form action="/hasin haider/projects/CRUD/index.php?task=edit&id=<?= $id ?>" method="post">
+                      <input type="hidden" name="id" value="<?= $id ?>">
+                      <label for="firstName">First Name</label>
+                      <input type="text" name="firstName" id="firstName"
+                             value="<?= $studentEditable['firstName'] ?? '' ?>" required>
+                      <label for="lastName">Last Name</label>
+                      <input type="text" name="lastName" id="lastName"
+                             value="<?= $studentEditable['lastName'] ?? '' ?>" required>
+                      <label for="roll">Roll</label>
+                      <input type="number" name="roll" id="roll"
+                             value="<?= $studentEditable['roll'] ?? '' ?>" required>
+                      <button type="submit" class="button-primary" name="submit">Update</button>
+                  </form>
+              </div>
+          </div>
+		<?php endif;
+	endif; ?>
+    <!--	delete student output-->
+	<?php if ("delete" === $taskHolder) :
+		$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+		$studentDeleted = deleteStudent(DATABASE_FILE, $id);
+		if ($studentDeleted):?>
+          <div class="row">
+              <div class="column column-60 column-offset-20">
+                  <p>Student Deleted Successfully</p>
+              </div>
+          </div>
+		<?php endif;
+	endif; ?>
 </div>
 </body>
 

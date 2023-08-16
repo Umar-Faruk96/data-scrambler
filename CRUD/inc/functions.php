@@ -32,14 +32,14 @@
 				"roll" => 13,
 			],
 		];
-		$serializedData = serialize($allStudents);
-		file_put_contents($fileName, $serializedData, LOCK_EX);
+		$serializedStudentsData = serialize($allStudents);
+		file_put_contents($fileName, $serializedStudentsData, LOCK_EX);
 	}
 	
 	function generateReport(string $fileName): void
 	{
-		$serializedData = file_get_contents($fileName);
-		$allStudents = unserialize($serializedData);
+		$serializedStudentsData = file_get_contents($fileName);
+		$allStudents = unserialize($serializedStudentsData);
 		?>
        <table>
            <thead>
@@ -96,7 +96,42 @@
 			
 			$serializedStudentsData = serialize($allStudents);
 			file_put_contents($fileName, $serializedStudentsData, LOCK_EX);
+			return false;
+		}
+		return false;
+	}
+	
+	function getStudent(string $fileName, string $id): mixed
+	{
+		$serializedStudentsData = file_get_contents($fileName);
+		$allStudents = unserialize($serializedStudentsData);
+		foreach ($allStudents as $student) {
+			if ($student['id'] == $id) {
+				return $student;
+			}
+		}
+		return false;
+	}
+	
+	function updateStudent(string $fileName, string $id, string $firstName, string $lastName, string $roll): bool
+	{
+		$serializedStudentsData = file_get_contents($fileName);
+		$allStudents = unserialize($serializedStudentsData);
+		$rollMatched = false;
+		foreach ($allStudents as $_student) {
+			if ($_student['roll'] === $roll && $_student['id'] != $id) {
+				$rollMatched = true;
+				break;
+			}
+		}
+		if (!$rollMatched) {
+			$allStudents[$id - 1]['firstName'] = $firstName;
+			$allStudents[$id - 1]['lastName'] = $lastName;
+			$allStudents[$id - 1]['roll'] = $roll;
+			$serializeAgain = serialize($allStudents);
+			file_put_contents($fileName, $serializeAgain, LOCK_EX);
 			return true;
 		}
 		return false;
 	}
+ 
