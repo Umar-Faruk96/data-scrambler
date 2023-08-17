@@ -60,7 +60,7 @@
                   </td>
                   <td>
 							<?php printf(
-								"<a href='/hasin haider/projects/CRUD/index.php?task=edit&id=%s'>Edit</a> | <a href='/hasin haider/projects/CRUD/index.php?task=delete&id=%s'>Delete</a>",
+								"<a href='/hasin haider/projects/CRUD/index.php?task=edit&id=%s'>Edit</a> | <a class='delete' href='/hasin haider/projects/CRUD/index.php?task=delete&id=%s'>Delete</a>",
 								$student["id"],
 								$student["id"]);
 							?>
@@ -96,7 +96,7 @@
 			
 			$serializedStudentsData = serialize($allStudents);
 			file_put_contents($fileName, $serializedStudentsData, LOCK_EX);
-			return false;
+			return true;
 		}
 		return false;
 	}
@@ -134,4 +134,22 @@
 		}
 		return false;
 	}
- 
+	
+	function deleteStudent(string $fileName, string $id): bool
+	{
+		$serializedStudentsData = file_get_contents($fileName);
+		$allStudents = unserialize($serializedStudentsData);
+		if ($id > 0) {
+			unset($allStudents[$id - 1]);
+		}
+		$serializeAgain = serialize($allStudents);
+		file_put_contents($fileName, $serializeAgain, LOCK_EX);
+		return true;
+	}
+	
+	function printRaw(string $fileName): voidz
+	{
+		$serializedStudentsData = file_get_contents($fileName);
+		$allStudents = unserialize($serializedStudentsData);
+		print_r($allStudents);
+	}

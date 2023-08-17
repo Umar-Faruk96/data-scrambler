@@ -54,6 +54,7 @@
             margin-top: 20px;
         }
     </style>
+    <script src='assets/js/script.js' type='application/javascript'></script>
 </head>
 
 <body>
@@ -84,6 +85,9 @@
        <div class="row">
            <div class="column column-60 column-offset-20">
 				  <?php generateReport(DATABASE_FILE); ?>
+               <!--<pre>
+                     <?php /*printRaw(DATABASE_FILE) */?>
+               </pre>-->
            </div>
        </div>
 	<?php endif; ?>
@@ -135,11 +139,11 @@
           <div class="row">
               <div class="column column-60 column-offset-20">
                   <p>Student Deleted Successfully</p>
+                  <a href="/hasin haider/projects/CRUD/index.php?task=report">See Student Lists</a>
               </div>
           </div>
 		<?php endif;
 	endif; ?>
 </div>
 </body>
-
 </html>
