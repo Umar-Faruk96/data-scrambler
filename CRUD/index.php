@@ -1,14 +1,18 @@
 <?php
 	declare(strict_types=1);
 	require_once "inc/functions.php";
+	require_once 'bootstrap.php';
+	
 	$seedInfo = '';
 	$taskHolder = $_GET['task'] ?? 'report';
 	$taskError = $_GET['error'] ?? 'not found';
+	
 	# seed mechanism
 	if ('seed' === $taskHolder) {
 		seed(DATABASE_FILE);
 		$seedInfo = "Seeding is completed";
 	}
+	
 	#add and update student logic
 	if (isset($_POST['submit'])) {
 		$firstName = filter_input(INPUT_POST, 'firstName', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -38,6 +42,7 @@
 		}
 	}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -50,7 +55,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.css">
 
     <style>
-        body {
+        body, div {
             margin-top: 20px;
         }
     </style>
@@ -72,6 +77,7 @@
 			  ?>
         </div>
     </div>
+
     <!--   duplicate roll found output-->
 	<?php if ("found" === $taskError) : ?>
        <div class="row">
@@ -80,17 +86,19 @@
            </div>
        </div>
 	<?php endif; ?>
+
     <!--   generate report output-->
 	<?php if ("report" === $taskHolder) : ?>
        <div class="row">
            <div class="column column-60 column-offset-20">
 				  <?php generateReport(DATABASE_FILE); ?>
                <!--<pre>
-                     <?php /*printRaw(DATABASE_FILE) */?>
+                     <?php /*printRaw(DATABASE_FILE) */ ?>
                </pre>-->
            </div>
        </div>
 	<?php endif; ?>
+
     <!--   add student form output-->
 	<?php if ("add" === $taskHolder) : ?>
        <div class="row">
@@ -107,6 +115,7 @@
            </div>
        </div>
 	<?php endif; ?>
+
     <!--	edit student form output-->
 	<?php if ("edit" === $taskHolder) :
 		$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -131,6 +140,7 @@
           </div>
 		<?php endif;
 	endif; ?>
+
     <!--	delete student output-->
 	<?php if ("delete" === $taskHolder) :
 		$id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -144,6 +154,7 @@
           </div>
 		<?php endif;
 	endif; ?>
+
 </div>
 </body>
 </html>

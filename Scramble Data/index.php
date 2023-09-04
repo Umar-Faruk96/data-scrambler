@@ -58,13 +58,13 @@ if ("decode" === $mode) {
     <div class="container">
         <div class="row">
             <div class="column column-60 column-offset-20">
-                <h2 id="display">Data Scrambler</h2>
+                <h2 id="display">Project 1: Data Scrambler</h2>
                 <p>Use this application to scramble your data</p>
                 <p>
                     <!-- // ! look out the path carefully-->
-                    <a href="/php/hasin haider/projects/index.php?mode=encode">Encode</a> |
-                    <a href="/php/hasin haider/projects/index.php?mode=decode">Decode</a> |
-                    <a href="/php/hasin haider/projects/index.php?mode=key">Generate Key</a>
+                    <a href="/hasin haider/Scramble Data/index.php?mode=encode">Encode</a> |
+                    <a href="/hasin haider/Scramble Data/index.php?mode=decode">Decode</a> |
+                    <a href="/hasin haider/Scramble Data/index.php?mode=key">Generate Key</a>
                 </p>
             </div>
 

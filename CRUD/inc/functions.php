@@ -79,7 +79,7 @@
 		$allStudents = unserialize($serializedStudentsData);
 		$rollMatched = false;
 		foreach ($allStudents as $_student) {
-			if ($_student['roll'] === $roll) {
+			if ($_student['roll'] == $roll) {
 				$rollMatched = true;
 				break;
 			}
@@ -119,7 +119,7 @@
 		$allStudents = unserialize($serializedStudentsData);
 		$rollMatched = false;
 		foreach ($allStudents as $_student) {
-			if ($_student['roll'] === $roll && $_student['id'] != $id) {
+			if ($_student['roll'] == $roll && $_student['id'] != $id) {
 				$rollMatched = true;
 				break;
 			}
@@ -147,9 +147,9 @@
 		return true;
 	}
 	
-	function printRaw(string $fileName): voidz
+	/*function printRaw(string $fileName): void
 	{
 		$serializedStudentsData = file_get_contents($fileName);
 		$allStudents = unserialize($serializedStudentsData);
 		print_r($allStudents);
-	}
+	}*/
