@@ -1,7 +1,7 @@
 <?php
 	declare(strict_types=1);
 	require_once 'bootstrap.php';
- 
+	
 	$logInError = false;
 	
 	$username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -12,6 +12,7 @@
 	if ($username && $password) {
 		$_SESSION['loggedIn'] = false;
 		$_SESSION['user'] = false;
+		$_SESSION['role'] = false;
 		#var_dump($username, $password);
 		#var_dump($_SESSION);
 		#var_dump($filepath);
@@ -21,6 +22,7 @@
 			if ($data[0] === $username && $data[1] === sha1($password)) {
 				$_SESSION['loggedIn'] = true;
 				$_SESSION['user'] = $username;
+				$_SESSION['role'] = $data[2];
 				#var_dump($_SESSION);
 				header('location:/hasin haider/projects/CRUD/index.php');
 			}
@@ -34,6 +36,7 @@
 	if (isset($_GET['logOut'])) {
 		$_SESSION['loggedIn'] = false;
 		$_SESSION['user'] = false;
+		$_SESSION['role'] = false;
 		session_destroy();
 		header('location:/hasin haider/projects/CRUD/index.php');
 	}

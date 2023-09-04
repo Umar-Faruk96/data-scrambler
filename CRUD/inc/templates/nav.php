@@ -14,7 +14,7 @@
 			 if ($_SESSION['loggedIn']) {
 				 // Show the "Log Out" link
 				 ?>
-              <a href="/hasin haider/projects/CRUD/auth.php?logOut=true">Log Out</a>
+              <a href="/hasin haider/projects/CRUD/auth.php?logOut=true">Log Out (<?= $_SESSION['role'] ?>)</a>
 				 <?php
 			 } else {
 				 // Show the "Log In" link
